@@ -1,4 +1,4 @@
-name: Deploy to VPS
+name: Deploy to VPS with Docker
 
 on:
   push:
@@ -26,15 +26,14 @@ jobs:
             --exclude '.git' \
             --exclude '.github' \
             --exclude 'node_modules' \
-            --exclude 'backend/.env' \
+            --exclude '.env.docker' \
             -e "ssh -i ~/.ssh/id_rsa" \
             ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/todolist/
 
-      - name: Instalar dependencias y reiniciar el backend
+      - name: Desplegar con Docker Compose
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} '
-            cd /var/www/todolist/backend &&
-            npm install --production &&
-            sudo systemctl restart todolist-backend &&
-            sudo systemctl reload nginx
+            cd /var/www/todolist &&
+            docker compose down &&
+            docker compose up -d --build
           '
