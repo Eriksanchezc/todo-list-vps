@@ -94,7 +94,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.listen(PORT, '127.0.0.1', async () => {
+app.listen(PORT, '0.0.0.0', async () =>   {
   console.log(`Servidor backend corriendo en http://127.0.0.1:${PORT}`);
   await initDB();
 });
